@@ -14,3 +14,23 @@ def load_file(filename):
                 continue
     return data
 
+
+def main():
+
+    #NOTE: use looping here instead of fixed paths
+    f1 = load_file("../22118_project_data/GSM266996.txt")
+    f2 = load_file("../22118_project_data/GSM266997.txt")
+    f3 = load_file("../22118_project_data/GSM266998.txt")
+
+    #keep only probes present in all files
+    common = set(f1) & set(f2) & set(f3)
+
+    with open("data.txt", "w") as out:
+        out.write("rep1\trep2\trep3\n")
+
+        for probe in common:
+            out.write(f"{f1[probe]}\t{f2[probe]}\t{f3[probe]}\n")
+
+
+if __name__ == "__main__":
+    main()
