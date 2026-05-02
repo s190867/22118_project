@@ -44,3 +44,23 @@ def introduce_missing(data, percent):
     data_copy[row_indices, col_indices] = np.nan
 
     return data_copy, (row_indices, col_indices)
+
+#NOTE: new function, distance, 
+def distance(a, b):
+    """
+    Euclidean distance ignores NAN values
+    """
+    
+    sum_sq = 0
+    count = 0
+    
+    for i in range(len(a)):
+        if not np.isnan(a[i]) and not np.isnan(b[i]):
+            sum_sq += (a[i] - b[i]) ** 2
+            count += 1
+    
+    if count == 0:
+        return np.inf
+    
+    return np.sqrt(sum_sq)
+
