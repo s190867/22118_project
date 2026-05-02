@@ -1,14 +1,46 @@
 #!/usr/bin/env python3
 
-import numpy
-
+import numpy as np
 
 def load_data(filename):
     """
-    Loads tab separated matrix data.
+    Loads tab-separated matrix data.
     Assumes first colum is ID, skips it.
-    Converts NA to np.nan
+    Converts NA to np.nan.
     """
-    data = numpy.genfromtxt(filename, delimiter="\t", skip_header=1, dtype=float, 
-    missing_values="NA", filling_values=numpy.nan)
+    data = np.genfromtxt(
+        filename,
+        delimiter="\t",
+        skip_header=1,
+        dtype=float,
+        missing_values="NA",
+        filling_values=np.nan
+    )
+
     return data
+
+
+def introduce_missing(data, percent):
+    """
+    Randomly replace a percentage of values with np.nan.
+    Returns modified data and indices of removed values.
+    """
+    if not (0 < percent < 1):
+        raise ValueError("percent must be between 0 and 1")
+
+    #NOTE: hard-coded
+    np.random.seed(42)
+
+    data_copy = data.copy()
+    rows, cols = data.shape
+    total = rows * cols
+    n_missing = int(total * percent)
+
+    #selected positions at random
+    flat_indices = np.random.choice(total, n_missing, replace=False)
+    row_indices = flat_indices // cols
+    col_indices = flat_indices % cols
+    
+    data_copy[row_indices, col_indices] = np.nan
+
+    return data_copy, (row_indices, col_indices)
