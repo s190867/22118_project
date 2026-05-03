@@ -88,3 +88,44 @@ def knn_impute(data, k):
             print(f"Row {i}/{rows}")
 
         for j in range(cols):
+
+            if np.isnan(data[i, j]):
+
+                distances = []
+
+                #find all valid rows for this column
+                for r in range(rows):
+                    if r != i:  #skip self
+                        if not np.isnan(data[r, j]):  #this row has a value in column j
+                            d = distance(data[i], data[r])
+                            distances.append((d, data[r, j]))
+    
+                #sort by distance (smallest first)
+                distances.sort(key=lambda x: x[0])
+                
+                #take k nearest
+                neighbors = distances[:k]
+                
+                ##impute value
+                if len(neighbors) == 0:
+
+                    #fallback: use column average
+                    col_sum = 0
+                    col_count = 0
+                    for row in range(rows):
+                        if not np.isnan(data[row, j]):
+                            col_sum += data[row, j]
+                            col_count += 1
+                    if col_count > 0:
+                        imputed[i, j] = col_sum / col_count
+                    else:
+                        imputed[i, j] = 0  #or keep as nan
+
+                else:
+                    #average the neighbor values
+                    total = 0
+                    for dist, val in neighbors:
+                        total += val
+                    imputed[i, j] = total / len(neighbors)
+
+    return imputed
