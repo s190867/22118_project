@@ -129,3 +129,13 @@ def knn_impute(data, k):
                     imputed[i, j] = total / len(neighbors)
 
     return imputed
+
+def compute_rmse(original, imputed, missing_indices):
+    """
+    Compute RMSE only on values that have been removed.
+    """
+    errors = []
+
+    for i, j in zip(*missing_indices):
+        errors.append((original[i, j] - imputed[i, j]) ** 2)
+    return np.sqrt(np.mean(errors))
