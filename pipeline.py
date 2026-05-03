@@ -64,3 +64,27 @@ def distance(a, b):
     
     return np.sqrt(sum_sq)
 
+
+
+
+def knn_impute(data, k):
+    """
+    Imputes missing values using k-nearest neighbors,
+    """
+    if not isinstance(k, int) or k <= 0:
+        raise ValueError("k must be a positive integer")
+
+    imputed = data.copy()
+    rows, cols = data.shape
+
+    for i in range(rows):
+
+        if i == 300:
+            break
+
+        #progress print every 50 rows
+        #process is quadratic, takes a long time
+        if i % 50 == 0:
+            print(f"Row {i}/{rows}")
+
+        for j in range(cols):
