@@ -1,31 +1,37 @@
-
 #!/usr/bin/env python3
 
-from pipeline_v6 import load_data, introduce_missing, knn_impute, compute_rmse
 import numpy as np
+from pipeline_v9 import load_data, introduce_missing, knn_impute, compute_rmse
 
 def run_experiment(data, missing_percentages, k_values):
     """
-    Runs experiments with different k values and missing percentages
+    Runs experiments with different k values and missing percentages    
     """
 
     results = {}
+
     for percent in missing_percentages:
         percent_results = []
 
-        #generate 1 corrupted dataset per percentage
+        #Generate 1 corrupted dataset per percentage
         corrupted, missing_idx = introduce_missing(data, percent)
 
+        #now call the functions from the pipeline script
         for k in k_values:
+
+            print(f"  k={k}...", end=" ", flush=True)
+
             imputed = knn_impute(corrupted, k)   #NOTE: same corrupted dataset, change?
-            error = compute_rmse(data, imputed, missing_idx)
+            error = compute_rmse(data, imputed, missing_idx, max_row=1500)
             percent_results.append(error)
 
+            print(f"RMSE={error:.3f}")
+
         results[percent] = percent_results
+
     return results
 
-
-#NOTE: now call the functions with the set parameters, use only when running the script as stand-alone
+#now call the functions with the set parameters, use only when running the experiment script stand-alon
 if __name__ == "__main__":
 
     print("Loading data...")
