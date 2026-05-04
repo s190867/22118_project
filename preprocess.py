@@ -25,12 +25,12 @@ def main():
     #keep only probes present in all files
     common = set(f1) & set(f2) & set(f3)
 
+    #NOTE: added probe_id to the resultant data file
     with open("data.txt", "w") as out:
-        out.write("rep1\trep2\trep3\n")
+        out.write("Probe_ID\trep1\trep2\trep3\n")
 
-        for probe in common:
-            out.write(f"{f1[probe]}\t{f2[probe]}\t{f3[probe]}\n")
-
+        for probe in sorted(common):
+            out.write(f"{probe}\t{f1[probe]}\t{f2[probe]}\t{f3[probe]}\n")
 
 if __name__ == "__main__":
     main()
