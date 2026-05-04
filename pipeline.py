@@ -139,3 +139,25 @@ def compute_rmse(original, imputed, missing_indices):
     for i, j in zip(*missing_indices):
         errors.append((original[i, j] - imputed[i, j]) ** 2)
     return np.sqrt(np.mean(errors))
+
+
+def main():
+    #load data
+    data = load_data("data.txt")
+
+    #introduce missing vAluees (10%)
+    corrupted, missing_idx = introduce_missing(data, 0.1)
+
+    #takes a bit of time, print to confirm its running
+    print("Starting KNN.....")
+
+    #impute using k-NN
+    imputed = knn_impute(corrupted, k=10)
+
+    #evaluAte
+    error = compute_rmse(data, imputed, missing_idx)
+
+    print("RMSE:", error)
+
+if __name__ == "__main__":
+    main()
