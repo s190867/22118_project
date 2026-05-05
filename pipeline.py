@@ -13,6 +13,7 @@ def load_data(filename):
         delimiter="\t",
         skip_header=1,
         dtype=float,
+        usecols=range(1, 4),  #NOTE: skip probe_id, use only columns 1-3
         missing_values="NA",
         filling_values=np.nan
     )
@@ -63,7 +64,6 @@ def distance(a, b):
         return np.inf
     
     return np.sqrt(sum_sq)
-
 
 
 
@@ -130,23 +130,39 @@ def knn_impute(data, k):
 
     return imputed
 
-def compute_rmse(original, imputed, missing_indices):
+#NOTE: added max_row = None as a default
+def compute_rmse(original, imputed, missing_indices, max_row=None):
     """
     Compute RMSE only on values that have been removed.
+    If max_row specified, compute only for rows < max_row
     """
     errors = []
 
     for i, j in zip(*missing_indices):
+        
+        #skip if past processed rows
+        if max_row is not None and i >= max_row:
+            continue
+        
         errors.append((original[i, j] - imputed[i, j]) ** 2)
+    
+    #if no errors
+    if len(errors) == 0:
+        return np.nan
+    
     return np.sqrt(np.mean(errors))
 
-
-def main():
+#NOTE: renamed to pipeline
+def pipeline():
     #load data
     data = load_data("data.txt")
 
     #introduce missing vAluees (10%)
     corrupted, missing_idx = introduce_missing(data, 0.1)
+
+    #NOTE: debug lines, missing values beyond 300
+    print(f"Missing indices range: rows {min(missing_idx[0])}-{max(missing_idx[0])}, cols {min(missing_idx[1])}-{max(missing_idx[1])}")
+    print(f"Total missing values: {len(missing_idx[0])}")
 
     #takes a bit of time, print to confirm its running
     print("Starting KNN.....")
@@ -155,7 +171,7 @@ def main():
     imputed = knn_impute(corrupted, k=10)
 
     #evaluAte
-    error = compute_rmse(data, imputed, missing_idx)
+    error = compute_rmse(data, imputed, missing_idx,  max_row=300)
 
     print("RMSE:", error)
 
