@@ -1,0 +1,31 @@
+k-NN Imputation for Microarray Data
+
+Introduction
+- Brief overview of microarray experiments and the MVP
+- Purpose of imputation (cheaper than redoing experiments)
+- What are the k-NN advantages over just row means or SVD approaches (refs 1 and 2)
+
+Methods
+- Describe the dataset (datafiles, probe number, rep numbers)
+- Missing value generation, i.e. removing randoms w/ set frequency
+- Explanation of k-NN (euclidian distance, neighbor select, means calculaion)
+- Evaluatoin metric explanation (RMSE on values between steps 2-3)
+
+Results
+- Plot 1 RMSE vs k for range of % (e.g., 5-20%)
+- Plot 2 RMSE vs missing % for range of k
+- Descr. of trends (k optimum, impact of missing % on accuracy)
+
+Discussion
+- Interpretation of best k values
+- Describing degrading accuracy with increasing missing %
+- Limitatoins (comp time, problens when little data)
+- Validation effectiveness
+
+Conclusion
+- Summary of the k-NN performance
+- Confirmation that method is succesfully imputing with OK eror rate
+
+References
+- Troyanskaya et al. 2001
+- Kim et al. 2004
