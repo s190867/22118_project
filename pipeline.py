@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
+import argparse
 
 def load_data(filename):
     """
@@ -152,7 +153,7 @@ def compute_rmse(original, imputed, missing_indices, max_row=None):
     
     return np.sqrt(np.mean(errors))
 
-#NOTE: renamed to pipeline
+
 def pipeline():
     #load data
     data = load_data("data.txt")
@@ -175,5 +176,27 @@ def pipeline():
 
     print("RMSE:", error)
 
+
+#NOTE: added the entire argparse block below so can be run from command line with custom parameters instead of hard-coded
 if __name__ == "__main__":
-    main()
+
+    #create parser object
+    parser = argparse.ArgumentParser(description='k-NN imputation')
+
+    parser.add_argument('-file', default='data.txt', help='Input file')   #take input file
+    parser.add_argument('-k', type=int, default=10, help='Number of neighbors')   #take k value
+    parser.add_argument('-missing', type=float, default=0.1, help='Missing percentage (0-1)')   #take missing percentage
+    
+    args = parser.parse_args()
+    
+    data = load_data(args.file)
+    corrupted, missing_idx = introduce_missing(data, args.missing)   #call the introduce missing function
+    
+    print(f"Missing indices range: rows {min(missing_idx[0])}-{max(missing_idx[0])}")
+    print(f"Total missing values: {len(missing_idx[0])}")
+    print("Starting KNN...")
+    
+    imputed = knn_impute(corrupted, k=args.k)   #call impute function
+    error = compute_rmse(data, imputed, missing_idx, max_row=300)   #call function to calculate RMSE
+    
+    print(f"RMSE: {error}")
