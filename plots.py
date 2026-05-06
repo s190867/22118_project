@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 #importing from pipeline and experiment scripts to run the plot script
 from pipeline_v2 import load_data
-from experiment_v1 import run_experiment
+from experiment_v2 import run_experiment
 
 def plot_results(results, k_values):
     """
@@ -28,13 +28,20 @@ if __name__ == "__main__":
 
     print("Loading data and running experiment...")
     
+    #setting parameters
     data = load_data("data.txt")
-    missing_percents = [0.05, 0.10, 0.15, 0.25, 0.30]
+    missing_percentages = [0.05, 0.10, 0.15, 0.25, 0.30]
     k_values = [5, 6, 7, 8, 9, 10]
-    
-    results = run_experiment(data, missing_percents, k_values)
-    
-    #plot with matplotlib and view in its default viewer when running from terminal
+
+    results = run_experiment(data, missing_percentages, k_values)
+
+    #NOTE: write results to file so can easily view them
+    with open("results.txt", "w") as f:
+        for percent, errors in results.items():
+            f.write(f"{percent}: {errors}\n")
+            
+    #NOTE: plot with matplotlib and view in its default viewer when running from terminal
     print("\nGenerating plot...")
     plot_results(results, k_values)
     print("Plot saved as 'knn_results.png'")
+  
