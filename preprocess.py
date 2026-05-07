@@ -18,9 +18,9 @@ def load_file(filename):
 def main():
 
     #each file below adds one time-specific data column to the final data.txt, so time imputatoin
-    f1 = load_file("../22118_project_data/GSM266996.txt")
-    f2 = load_file("../22118_project_data/GSM266997.txt")
-    f3 = load_file("../22118_project_data/GSM266998.txt")
+    f1 = load_file("../data/GSM266996.txt")
+    f2 = load_file("../data/GSM266997.txt")
+    f3 = load_file("../data/GSM266998.txt")
 
     #keep only probes present in all the files, so data.txt will contain only full rows
     common = set(f1) & set(f2) & set(f3)
