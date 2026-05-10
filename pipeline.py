@@ -162,7 +162,7 @@ def pipeline():
     #introduce missing vAluees (10%)
     corrupted, missing_idx = introduce_missing(data, 0.1)
 
-    #NOTE: debug lines, missing values beyond 300
+    #NOTE: debug lines, missing values beyond row limit
     print(f"Missing indices range: rows {min(missing_idx[0])}-{max(missing_idx[0])}, cols {min(missing_idx[1])}-{max(missing_idx[1])}")
     print(f"Total missing values: {len(missing_idx[0])}")
 
@@ -173,7 +173,7 @@ def pipeline():
     imputed = knn_impute(corrupted, k=10)
 
     #evaluAte
-    error = compute_rmse(data, imputed, missing_idx,  max_row=300)
+    error = compute_rmse(data, imputed, missing_idx,  max_row=1500)
 
     print("RMSE:", error)
 
@@ -198,6 +198,6 @@ if __name__ == "__main__":
     print("Starting KNN...")
     
     imputed = knn_impute(corrupted, k=args.k)   #call impute function
-    error = compute_rmse(data, imputed, missing_idx, max_row=300)   #call function to calculate RMSE
+    error = compute_rmse(data, imputed, missing_idx, max_row=1500)   #call function to calculate RMSE
     
     print(f"RMSE: {error}")
