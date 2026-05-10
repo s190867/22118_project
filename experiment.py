@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
-from pipeline_v9 import load_data, introduce_missing, knn_impute, compute_rmse
+from pipeline import load_data, introduce_missing, knn_impute, compute_rmse
 
 def run_experiment(data, missing_percentages, k_values):
     """
@@ -39,8 +39,8 @@ if __name__ == "__main__":
     print(f"Data shape: {data.shape}")
     
     #define test parameters
-    missing_percentages = [0.05, 0.10]  #just 2 for a quick test
-    k_values = [5, 10]  #2 for quick test
+    missing_percentages = [0.05, 0.10, 0.15, 0.20, 0.25]
+    k_values = [3, 5, 10, 15, 20]
     
     print("\nStarting experiments...")
     
