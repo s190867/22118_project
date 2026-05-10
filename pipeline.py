@@ -80,7 +80,8 @@ def knn_impute(data, k):
 
     for i in range(rows):
 
-        if i == 300:
+        #OBS! LIMIT SET MANUALLY, REMOVE OR CHANGE IF NEEDED
+        if i == 1500:
             break
 
         #progress print every 50 rows
