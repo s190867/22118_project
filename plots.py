@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import time
 
 #importing from pipeline and experiment scripts to run the plot script
-from pipeline_v8 import load_data
-from experiment_v3 import run_experiment
+from pipeline import load_data
+from experiment import run_experiment
 
 def plot_results(results, k_values):
     """
